@@ -1,0 +1,28 @@
+services:
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    environment:
+      DOZZLE_MODE: server
+      DOZZLE_NO_ANALYTICS: true
+      DOZZLE_AUTH_PROVIDER: simple
+      DOZZLE_HOSTNAME: Aper
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - dozzle-data:/data
+      - ./users.yml:/data/users.yml  # Somebody is killing themselves today.
+    ports:
+      - 26685:8080
+    deploy:
+      mode: global
+
+    healthcheck:
+      interval: 60s
+      test: ["CMD", "/dozzle", "healthcheck"]
+      timeout: 30s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  dozzle-data:

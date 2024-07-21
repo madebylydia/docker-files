@@ -1,0 +1,26 @@
+services:
+  uptime-kuma:
+    image: 'louislam/uptime-kuma:1'
+    container_name: uptime-kuma
+
+    volumes:
+      - uptime-kuma:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - '46226:3001'
+    restart: always
+
+    healthcheck:
+      interval: 60s
+      test:
+        - CMD-SHELL
+        - extra/healthcheck
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  default:
+
+volumes:
+  uptime-kuma:

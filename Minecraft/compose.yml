@@ -1,0 +1,70 @@
+services:
+  mc:
+    build:
+      context: .
+      dockerfile: mc.Dockerfile
+    tty: true
+    stdin_open: true
+    ports:
+      - "25565:25565"
+      - "20024:25575"
+    restart: no
+
+    environment:
+      # Server settings
+      EULA: "TRUE"
+      TYPE: FABRIC
+      VERSION: 1.20.6
+      USE_AIKAR_FLAGS: true
+      SNOOPER_ENABLED: false
+      TZ: Europe/Paris
+
+      # Server metadata
+      ONLINE_MODE: false
+      SERVER_NAME: "Les potes: V2"
+      ICON: /assets/icon.png
+      MOTD: "Bienvenue chez \u00A7o\u00A73Les Potes: Saison 2 Remake revisée : L'intégrale Blu-Ray !\u00A77 Hébergé par \u00A74lydia39\u00A77. Oui connard, c'est moi qui faut ping"
+      MAX_PLAYERS: 10
+
+      # Game settings
+      DIFFICULTY: normal
+      VIEW_DISTANCE: 15
+
+      # Whitelist + Server operator
+      ENABLE_WHITELIST: true
+      ENFORCE_WHITELIST: true
+      WHITELIST_FILE: /assets/whitelist.json
+      OPS_FILE: /assets/ops.json
+      EXISTING_WHITELIST_FILE: SYNCHRONIZE
+      EXISTING_OPS_FILE: SYNCHRONIZE
+
+      # RCON
+      RCON_PASSWORD: $SERVICE_PASSWORD_RCON
+
+      # Mods
+      MODRINTH_PROJECTS: |
+        lithium
+        modernfix
+        fabric-api
+        essential-commands:beta
+        dcintegration
+        chunky
+        collective
+        villager-names-serilum
+      MODRINTH_DOWNLOAD_DEPENDENCIES: required
+      MODRINTH_ALLOWED_VERSION_TYPE: release
+      
+      # Mods config
+      REPLACE_ENV_IN_PLACE: true
+      REPLACE_ENV_DURING_SYNC: true
+      REPLACE_ENV_SUFFIXES: yml,yaml,txt,cfg,conf,properties,hjson,json,toml
+      CFG_DISCORD_BOT_TOKEN: $SERVICE_DISCORD_BOT_TOKEN
+
+    volumes:
+      - mc_data:/data
+      # Uncomment this part to re-sync the "mods_config" folder locally.
+      # This doesn't work in production/Coolify.
+      # - ./mods_config:/data/config
+
+volumes:
+  mc_data:
