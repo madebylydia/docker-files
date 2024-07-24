@@ -3,8 +3,9 @@ services:
     image: netdata/netdata:stable
     container_name: netdata
     pid: host
-    network_mode: host
     restart: unless-stopped
+    networks:
+      - netdata
     cap_add:
       - SYS_PTRACE
       - SYS_ADMIN
@@ -30,6 +31,9 @@ services:
       - NETDATA_CLAIM_URL=$SERVICE_NETDATA_CLAIM_URL
       - NETDATA_CLAIM_ROOMS=$SERVICE_NETDATA_CLAIM_ROOMS
 
+networks:
+  netdata:
+    driver: host
 volumes:
   netdataconfig:
   netdatalib:
